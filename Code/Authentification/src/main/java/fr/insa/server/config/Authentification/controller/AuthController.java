@@ -1,7 +1,7 @@
 package fr.insa.server.config.Authentification.controller;
 
-import com.example.auth.model.User;
-import com.example.auth.repository.UserRepository;
+import fr.insa.server.config.Authentification.model.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
