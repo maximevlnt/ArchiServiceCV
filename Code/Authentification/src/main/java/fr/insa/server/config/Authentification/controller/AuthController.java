@@ -2,64 +2,54 @@ package fr.insa.server.config.Authentification.controller;
 
 import fr.insa.server.config.Authentification.model.User;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import java.util.List;
+
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+	
+    private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
-    @Autowired
-    private UserRepository userRepository;
+    public void AuthenticationService(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+    
+    /**
+     * Méthode pour vérifier les identifiants d'un utilisateur.
+     * @param firstname Le prénom de l'utilisateur.
+     * @param lastname Le nom de l'utilisateur.
+     * @param password Le mot de passe de l'utilisateur.
+     * @return Un objet User si les identifiants sont corrects, sinon null.
+     */
+    @GetMapping("/login/{firstname}/{lastname}/{password}")
+    
+    public User login(String firstname, String lastname, String password) {
+    	
+        String sql = "SELECT * FROM Users WHERE firstname = ? AND lastname = ? AND password = ?";
+        
+        // Utiliser jdbcTemplate pour exécuterSQL
+        
+        List<User> users = jdbcTemplate.query(
+        	    sql,
+        	    new Object[]{firstname, lastname, password},
+        	    (rs, rowNum) -> new User(
+        	        rs.getInt("ID"),
+        	        rs.getString("firstname"),
+        	        rs.getString("lastname"),
+        	        rs.getInt("IsAdmin"),
+        	        rs.getString("password")
+        	    ));
 
-    // Endpoint pour se connecter
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        User user = userRepository.findByEmail(loginRequest.getEmail());
-        if (user != null && user.getPassword().equals(loginRequest.getPassword())) {
-            return ResponseEntity.ok("Login successful");
+        if (users.isEmpty()) {
+            return null;
+        } else {
+            return users.get(0);
         }
-        return ResponseEntity.status(401).body("Invalid credentials");
+
     }
+    
+    }    
 
-    // Endpoint pour s'enregistrer
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
-        if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            return ResponseEntity.status(409).body("User already exists");
-        }
-
-        // Création d'un nouvel utilisateur
-        User newUser = new User();
-        newUser.setEmail(registerRequest.getEmail());
-        newUser.setPassword(registerRequest.getPassword());
-        userRepository.save(newUser);
-
-        return ResponseEntity.ok("User registered successfully");
-    }
-
-    // Requête pour login
-    static class LoginRequest {
-        private String email;
-        private String password;
-
-        public String getEmail() { return email; }
-        public void setEmail(String email) { this.email = email; }
-
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
-    }
-
-    // Requête pour register
-    static class RegisterRequest {
-        private String email;
-        private String password;
-
-        public String getEmail() { return email; }
-        public void setEmail(String email) { this.email = email; }
-
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
-    }
-}
