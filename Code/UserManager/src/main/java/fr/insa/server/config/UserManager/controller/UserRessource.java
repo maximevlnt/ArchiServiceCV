@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.insa.server.config.UserManager.model.User;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class UserRessource {
@@ -17,12 +18,18 @@ public class UserRessource {
 		return 200;
 	}
 	
-	@PutMapping(value="/addUser/{firstname}/{lastname}/{password}")
-	public User AddUser(@PathVariable int firstname, int lastname, int password){
-		User user = new
-		return null;
-		
-	}
+    @PutMapping("/addUser")
+    public User addUser(
+            @RequestParam String firstname,
+            @RequestParam String lastname,
+            @RequestParam String password,
+            @RequestParam String password) {
+        // Logic to create a new user
+    	int randomId = ThreadLocalRandom.current().nextInt(1000000, 9999999);
+        User user = new User(randomId, firstname, lastname, 1, password); // Example: ID = 1, isAdmin = 0
+        // Normally, you would save the user to the database here
+        return user; // Returning the newly created user
+    }
 	
 
 }

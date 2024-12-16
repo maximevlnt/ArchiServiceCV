@@ -4,12 +4,14 @@ public class User {
 	private int ID;
 	private String firstname;
 	private String lastname;
+	private String password;
 	private int IsAdmin;
 	
-    public User(ID, firstname, lastname, IsAdmin) {
+    public User(int ID, String firstname, String lastname, int IsAdmin, String password) {
     	this.ID = ID;
     	this.firstname = firstname;
     	this.lastname = lastname;
+    	this.password = password;
     	this.IsAdmin = IsAdmin;
     }
 
