@@ -1,23 +1,22 @@
 package fr.insa.server.config.UserManager.controller;
 
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 import fr.insa.server.config.UserManager.model.User;
-import java.util.concurrent.ThreadLocalRandom;
 
 
 public class UserRessource {
-	
+
 	@GetMapping("/students")
 	public int UserName() {
 		return 200;
 	}
-	
+
     @PutMapping("/addUser")
     public User addUser(
             @RequestParam String firstname,
@@ -30,6 +29,6 @@ public class UserRessource {
         // Normally, you would save the user to the database here
         return user; // Returning the newly created user
     }
-	
+
 
 }

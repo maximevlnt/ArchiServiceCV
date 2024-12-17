@@ -6,7 +6,7 @@ public class User {
 	private String lastname;
 	private String password;
 	private int IsAdmin;
-	
+
     public User(int ID, String firstname, String lastname, int IsAdmin, String password) {
     	this.ID = ID;
     	this.firstname = firstname;
@@ -38,7 +38,7 @@ public class User {
     public void setFirstName(String firstName) {
         this.firstname = firstName;
     }
-    
+
     public void setPrivileges(int Privileges) {
     	this.IsAdmin = Privileges; // 1 = admin, 0 = classic user
     }
